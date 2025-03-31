@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/images/site.webmanifest">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A simple, minimal blog for those who love text.">
+    <title>Learn Vulkan (1) --- Create Physical Device | Classic</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="https://dululuparadin.github.io/css/theme-override.css">
+    
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <ul>
+          
+          
+          <li class="pull-left ">
+            <a href="https://dululuparadin.github.io/">~/classic</a>
+          </li>
+          
+          
+          <li class="pull-left ">
+            <a href="/categories/">~/categories</a>
+          </li>
+          
+          
+          <li class="pull-left ">
+            <a href="/tags/">~/tags</a>
+          </li>
+          
+
+          
+          
+          <li class="pull-right">
+            <a href="/index.xml">~/subscribe</a>
+          </li>
+          
+
+        </ul>
+      </nav>
+    </header>
+
+
+<div class="article-meta">
+<h1><span class="title">Learn Vulkan (1) &mdash; Create Physical Device</span></h1>
+
+<h2 class="date">2025/03/30</h2>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/code">Code</a> 
+  
+  
+  
+  Tags: <a href="/tags/vulkan">Vulkan</a> 
+  
+  
+</p>
+</div>
+
+
+
+<div class="content-wrapper">
+  <main>
+    <p>这一步我们将vulkan上下文封装到一个类中，并且实现物理设备的创建.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;print&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vulkan/vulkan.hpp&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Application</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Application() {
+</span></span><span style="display:flex;"><span>        Init();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">~</span>Application() {
+</span></span><span style="display:flex;"><span>        mInstance.destroy();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Init</span>() {
+</span></span><span style="display:flex;"><span>        InitInstance();
+</span></span><span style="display:flex;"><span>        InitPhysicalDevice();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">InitInstance</span>() {
+</span></span><span style="display:flex;"><span>        vk<span style="color:#f92672">::</span>ApplicationInfo appInfo { <span style="color:#e6db74">&#34;HelloApp&#34;</span>,
+</span></span><span style="display:flex;"><span>            VK_MAKE_VERSION(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>), <span style="color:#e6db74">&#34;HelloEngine&#34;</span>,
+</span></span><span style="display:flex;"><span>            VK_MAKE_VERSION(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>), VK_API_VERSION_1_4 };
+</span></span><span style="display:flex;"><span>        vk<span style="color:#f92672">::</span>InstanceCreateInfo instanceInfo{ {}, <span style="color:#f92672">&amp;</span>appInfo };
+</span></span><span style="display:flex;"><span>        mInstance <span style="color:#f92672">=</span> vk<span style="color:#f92672">::</span>createInstance(instanceInfo);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">InitPhysicalDevice</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">auto</span> phyDevices <span style="color:#f92672">=</span> mInstance.enumeratePhysicalDevices();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> phyDevice : phyDevices) {
+</span></span><span style="display:flex;"><span>            vk<span style="color:#f92672">::</span>PhysicalDeviceProperties property;
+</span></span><span style="display:flex;"><span>            property <span style="color:#f92672">=</span> phyDevice.getProperties();
+</span></span><span style="display:flex;"><span>            std<span style="color:#f92672">::</span>println(<span style="color:#e6db74">&#34;{} {} {}&#34;</span>,
+</span></span><span style="display:flex;"><span>                (<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)(property.deviceName), property.driverVersion, (<span style="color:#66d9ef">int</span>)property.deviceType);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 通常第一个就是我们想要的物理设备了.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        mPhysicalDevice <span style="color:#f92672">=</span> phyDevices.front();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    vk<span style="color:#f92672">::</span>Instance mInstance;
+</span></span><span style="display:flex;"><span>    vk<span style="color:#f92672">::</span>PhysicalDevice mPhysicalDevice;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Application app;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> EXIT_SUCCESS;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+    <a href="/"> >> Home</a>
+  </main>
+</div>
+    <footer>
+      
+      
+      <script>
+      (function() {
+        function center_el(tagName) {
+          var tags = document.getElementsByTagName(tagName), i, tag;
+          for (i = 0; i < tags.length; i++) {
+            tag = tags[i];
+            var parent = tag.parentElement;
+            
+            if (parent.childNodes.length === 1) {
+              
+              if (parent.nodeName === 'A') {
+                parent = parent.parentElement;
+                if (parent.childNodes.length != 1) continue;
+              }
+              if (parent.nodeName === 'P') parent.style.textAlign = 'center';
+            }
+          }
+        }
+        var tagNames = ['img', 'embed', 'object'];
+        for (var i = 0; i < tagNames.length; i++) {
+          center_el(tagNames[i]);
+        }
+      })();
+      </script>
+
+      
+      <hr/>
+      Open-Source | <a href="https://github.com/goodroot/hugo-classic">Github</a> | <a href="https://keybase.io/goodroot">Keybase</a>
+      
+    </footer>
+  </body>
+</html>
+

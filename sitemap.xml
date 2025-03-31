@@ -2,14 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://dululuparadin.github.io/categories/</loc>
+    <lastmod>2025-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://dululuparadin.github.io/categories/code/</loc>
+    <lastmod>2025-03-30T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://dululuparadin.github.io/</loc>
+    <lastmod>2025-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://dululuparadin.github.io/post/2025/03/30/vulkan-physical-device/</loc>
     <lastmod>2025-03-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://dululuparadin.github.io/post/</loc>
     <lastmod>2025-03-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://dululuparadin.github.io/categories/</loc>
-  </url><url>
     <loc>https://dululuparadin.github.io/tags/</loc>
+    <lastmod>2025-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://dululuparadin.github.io/tags/vulkan/</loc>
+    <lastmod>2025-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://dululuparadin.github.io/post/2025/03/29/vulkan-instance/</loc>
+    <lastmod>2025-03-29T00:00:00+00:00</lastmod>
   </url>
 </urlset>
